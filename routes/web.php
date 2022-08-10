@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 
@@ -21,7 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/about', function () {
-    return  view('about' , [
+    return  view('about', [
         "title" => "About",
         "name" => "M Iktafal Ma'arif",
         "email" => "miktafalmaarif@gmail.com",
@@ -29,24 +30,10 @@ Route::get('/about', function () {
     ]);
 });
 
-Route::get('/posts', function () {
-    return  view('posts', [
-        "title" => "Posts",
-        "posts" => Post::all()
-    ]);
-});
-
-//halaman single post
-Route::get('posts/{slug}', function($slug)
-{
-       return view('post', [
-        "title" => "Single Post",
-        "post" => Post::find($slug)
-    ]);
-});
-
-
-
-
-
-
+Route::get('/post/new', [PostController::class, 'create'])->name('post.create');
+Route::get('/post/{id}/edit', [PostController::class, 'edit'])->name('post.edit');
+Route::post('/post/{id}/update', [PostController::class, 'update'])->name('post.update');
+Route::get('/post/{id}/hapus', [PostController::class, 'destroy'])->name('post.destroy');
+Route::post('/post/new', [PostController::class, 'store'])->name('post.store');
+Route::get('/posts', [PostController::class, 'index'])->name('post.index');
+Route::get('/post/{slug}', [PostController::class, 'show'])->name('post.show');
